@@ -14,7 +14,9 @@ Plugin for Redmine. Show pdf attachments as thumnailable image
 
 `git clone https://github.com/HugoHasenbein/redmine_thumbnail_pdf.git`
 
-2. restart server f.i.  `sudo /etc/init.s/apache2 restart`
+2. restart server f.i.
+
+`sudo /etc/init.s/apache2 restart`
 
 ### Uninstall
 
