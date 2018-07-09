@@ -18,11 +18,13 @@ Plugin for Redmine. Show pdf attachments as thumnailable image
 
 ### Uninstall
 
-2. go to plugins folder
+1. go to plugins folder
 
 `rm -r redmine_thumbnail_pdf`
 
-3. restart server f.i.  `sudo /etc/init.s/apache2 restart`
+2. restart server f.i. 
+
+`sudo /etc/init.s/apache2 restart`
 
 ### Use
 
