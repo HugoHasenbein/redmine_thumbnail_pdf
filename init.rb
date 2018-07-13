@@ -19,6 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
+require 'redmine'
+
 Redmine::Plugin.register :redmine_thumbnail_pdf do
   name 'Redmine Thumbnail PDF'
   author 'Stephan Wenzel'

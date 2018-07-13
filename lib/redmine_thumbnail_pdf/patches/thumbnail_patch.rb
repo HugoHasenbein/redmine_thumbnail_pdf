@@ -30,7 +30,7 @@ module RedmineThumbnailPdf
           unloadable 	
           # for those, who read and analyze code: I haven't figured it out yet how to unset 
           # a constant and how to patch a function, which has been defined as self.function()
-          # in a base.class_eval block. In the meantime I proceed as follows
+          # in a base.class_eval block
           #
 		  @REDMINE_THUMBNAIL_PDF_CONVERT_BIN = (Redmine::Configuration['imagemagick_convert_command'] || 'convert').freeze
 		  @REDMINE_THUMBNAIL_PDF_ALLOWED_TYPES_WITH_PDF = %w(image/bmp image/gif image/jpeg image/png application/pdf)
