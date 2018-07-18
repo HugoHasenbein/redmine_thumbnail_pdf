@@ -42,4 +42,8 @@ Plugin for Redmine. Show pdf attachments as thumnailable image
 
 ### Change-Log* 
 
+**1.0.2** Moved parts of code to enhance compatibility with other plugins
+- Separeted functionality from All Thumbnails
+- Separated functionality from Redmine Preview PDF
+
 **1.0.1** Running on Redmine 3.4.6

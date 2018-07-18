@@ -27,17 +27,15 @@ module RedmineThumbnailPdf
         base.class_eval do
           unloadable
           
-          alias_method_chain 'thumbnailable?', 'pdf'         
+          alias_method_chain :image?, :thumbnail_pdf         
 
         end #base
       end #def
 
        module InstanceMethods
        
-	     def thumbnailable_with_pdf?
-	       
-	       thumbnailable_without_pdf? || is_pdf?
-	       
+	     def image_with_thumbnail_pdf?
+	       image_without_thumbnail_pdf? || is_pdf?
 	     end #def
 	     
 	       

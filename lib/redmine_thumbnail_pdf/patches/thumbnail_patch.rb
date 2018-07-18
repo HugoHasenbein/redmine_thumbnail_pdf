@@ -33,10 +33,14 @@ module RedmineThumbnailPdf
           # in a base.class_eval block
           #
 		  @REDMINE_THUMBNAIL_PDF_CONVERT_BIN = (Redmine::Configuration['imagemagick_convert_command'] || 'convert').freeze
-		  @REDMINE_THUMBNAIL_PDF_ALLOWED_TYPES_WITH_PDF = %w(image/bmp image/gif image/jpeg image/png application/pdf)
+		  @REDMINE_THUMBNAIL_PDF_ALLOWED_TYPES_WITH_PDF = %w(application/pdf)
 
 		  # Generates a thumbnail for the source image to target
-		  def self.generate(source, target, size)
+		  def self.generate_with_pdf(source, target, size)
+
+            target_without_pdf = generate_without_pdf(source, target, size)
+            
+            return target_without_pdf if target_without_pdf.present?
 
 			return nil unless convert_available?
 
@@ -48,6 +52,7 @@ module RedmineThumbnailPdf
 			  end
 
 			  page_num, background_switch = (mime_type =~ /application\/pdf/ ? ["[0]", "-background white -alpha remove -alpha off" ] : ["", ""])
+			  target += ".png" # force imagemagick to create a .png thumbnail
 
 			  directory = File.dirname(target)
 			  unless File.exists?(directory)
@@ -64,6 +69,8 @@ module RedmineThumbnailPdf
 			target
 		  end #def 
 		                     
+		  self.singleton_class.send(:alias_method_chain, :generate, :pdf)
+
         end #base
       end #self
 
