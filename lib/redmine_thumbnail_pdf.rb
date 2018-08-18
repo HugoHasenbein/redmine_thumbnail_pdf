@@ -25,5 +25,5 @@ Rails.configuration.to_prepare do
   require 'redmine_thumbnail_pdf/patches/thumbnail_patch'
   require 'redmine_thumbnail_pdf/patches/attachment_patch'
   require 'redmine_thumbnail_pdf/patches/attachments_controller_patch'
-
+  require 'redmine_thumbnail_pdf/patches/admin_controller_patch'
 end

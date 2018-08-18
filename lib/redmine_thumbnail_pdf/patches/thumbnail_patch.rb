@@ -32,7 +32,8 @@ module RedmineThumbnailPdf
           # a constant and how to patch a function, which has been defined as self.function()
           # in a base.class_eval block
           #
-		  @REDMINE_THUMBNAIL_PDF_CONVERT_BIN = (Redmine::Configuration['imagemagick_convert_command'] || 'convert').freeze
+		  @REDMINE_THUMBNAIL_PDF_GS_BIN                 = 'gs'.freeze
+		  @REDMINE_THUMBNAIL_PDF_CONVERT_BIN            = (Redmine::Configuration['imagemagick_convert_command'] || 'convert').freeze
 		  @REDMINE_THUMBNAIL_PDF_ALLOWED_TYPES_WITH_PDF = %w(application/pdf)
 
 		  # Generates a thumbnail for the source image to target
@@ -70,6 +71,13 @@ module RedmineThumbnailPdf
 		  end #def 
 		                     
 		  self.singleton_class.send(:alias_method_chain, :generate, :pdf)
+
+		  def self.gs_available?
+			return @gs_available if defined?(@gs_available)
+			@gs_available = system("#{shell_quote @REDMINE_THUMBNAIL_PDF_GS_BIN} -version") rescue false
+			logger.warn("Imagemagick's delegate (#{@REDMINE_THUMBNAIL_PDF_GS_BIN}) not available") unless @gs_available
+			@gs_available
+		  end
 
         end #base
       end #self

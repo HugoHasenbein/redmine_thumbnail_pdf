@@ -19,16 +19,5 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-require 'redmine'
-
-Redmine::Plugin.register :redmine_thumbnail_pdf do
-  name 'Redmine Thumbnail PDF'
-  author 'Stephan Wenzel'
-  description 'This is a plugin for Redmine to show pdf attachments as thumbnails'
-  version '1.0.3'
-  url 'https://github.com/HugoHasenbein/redmine_thumbnail_pdf'
-  author_url 'https://github.com/HugoHasenbein/redmine_thumbnail_pdf'
-
-end
-
-require "redmine_thumbnail_pdf"
+en:
+  text_gs_available_for_thumbnail_pdf: "Ghostscript available (needed for plugin 'Redmine Thumbnail PDF')"
