@@ -43,7 +43,9 @@ This plugin requires imagemagick and ghostscript to be installed
 ### Change-Log* 
 
 **1.0.4** fixed compatibility problems with other plugins
+
 **1.0.3** added check for Ghostscript
+
 **1.0.2** moved parts of code to enhance compatibility with other plugins
 - separeted functionality from All Thumbnails
 - separated functionality from Redmine Preview PDF
