@@ -34,30 +34,43 @@ module RedmineThumbnailPdf
         
       end #self
 
-      module InstanceMethods						
+      module InstanceMethods
 
-		def thumbnail_with_pdf
-		  if @attachment.thumbnailable? && tbnail = @attachment.thumbnail(:size => params[:size])
-			if stale?(:etag => tbnail)
-			  #
-			  # thumbnail file formats are not necessarily identical to their attachment file formats
-			  # anymore - therefore, we must check individually, which file format the thumbnail has
-			  #
-			  mime_type = ""
-			  File.open(tbnail) {|f| mime_type = MimeMagic.by_magic(f).try(:type) }
-			  thumbnail_filename   = File.basename(@attachment.filename, File.extname(@attachment.filename))
-			  thumbnail_filename  += Rack::Mime::MIME_TYPES.invert[mime_type] 
+        def thumbnail_with_pdf
+          
+          sent = false
+          #
+          #  @attachment.thumbnail_with_pdf will pass on this file to 
+          #  original thumbnail_with_pdf before it by itself creates a pdf thumbnail
+          #
+          if @attachment.thumbnailable? && tbnail = @attachment.thumbnail(:size => params[:size])
+            if stale?(:etag => tbnail)
+              #
+              # thumbnail file formats are not necessarily identical to their attachment file formats
+              # anymore - therefore, we must check individually, which file format the thumbnail has
+              #
+              mime_type = ""
+              File.open(tbnail) {|f| mime_type = MimeMagic.by_magic(f).try(:type) }
+              thumbnail_filename   = File.basename(@attachment.filename, File.extname(@attachment.filename))
+              thumbnail_filename  += Rack::Mime::MIME_TYPES.invert[mime_type] 
 
-			  send_file tbnail,
-				:filename => filename_for_content_disposition( thumbnail_filename ),
-				:type => mime_type,
-				:disposition => 'inline'
-			end
-		  else
-			# No thumbnail for the attachment or thumbnail could not be created
-			head 404
-		  end
-		end
+              send_file tbnail,
+                :filename => filename_for_content_disposition( thumbnail_filename ),
+                :type => mime_type,
+                :disposition => 'inline'
+                
+               sent = true
+            end
+          else
+
+            # No thumbnail for the attachment or thumbnail could not be created
+            head 404
+            sent = true
+          end
+
+          thumbnail_without_pdf unless sent
+
+        end #def
 
       end #module      
 

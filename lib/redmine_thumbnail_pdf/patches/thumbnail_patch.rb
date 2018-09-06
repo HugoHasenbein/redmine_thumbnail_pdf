@@ -28,6 +28,10 @@ module RedmineThumbnailPdf
         base.class_eval do
 
           unloadable 	
+
+ 		  #alias_method_chain, :generate, :pdf won't work here
+ 		  #look below
+
           # for those, who read and analyze code: I haven't figured it out yet how to unset 
           # a constant and how to patch a function, which has been defined as self.function()
           # in a base.class_eval block
@@ -38,19 +42,18 @@ module RedmineThumbnailPdf
 
 		  # Generates a thumbnail for the source image to target
 		  def self.generate_with_pdf(source, target, size)
-
-            target_without_pdf = generate_without_pdf(source, target, size)
             
-            return target_without_pdf if target_without_pdf.present?
+			mime_type = ""
+			unless File.open(source) {|f| mime_type = MimeMagic.by_magic(f).try(:type); @REDMINE_THUMBNAIL_PDF_ALLOWED_TYPES_WITH_PDF.include? mime_type }
+			  return generate_without_pdf(source, target, size)
+			end
 
-			return nil unless convert_available?
+			unless convert_available?
+			  Rails.logger.info "convert not available"
+			  return nil 
+			end
 
 			unless File.exists?(target)
-
-			  mime_type = ""
-			  unless File.open(source) {|f| mime_type = MimeMagic.by_magic(f).try(:type); @REDMINE_THUMBNAIL_PDF_ALLOWED_TYPES_WITH_PDF.include? mime_type }
-				return nil
-			  end
 
 			  page_num, background_switch = (mime_type =~ /application\/pdf/ ? ["[0]", "-background white -alpha remove -alpha off" ] : ["", ""])
 			  target += ".png" # force imagemagick to create a .png thumbnail
@@ -63,7 +66,7 @@ module RedmineThumbnailPdf
 			  cmd = "#{shell_quote @REDMINE_THUMBNAIL_PDF_CONVERT_BIN} #{shell_quote source}#{page_num} #{background_switch} -thumbnail #{shell_quote size_option} #{shell_quote target}"
 
 			  unless system(cmd)
-				logger.error("Creating thumbnail failed (#{$?}):\nCommand: #{cmd}")
+			    logger.error("Creating thumbnail failed (#{$?}):\nCommand: #{cmd}")
 				return nil
 			  end
 			end
